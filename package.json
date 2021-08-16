@@ -1,5 +1,5 @@
 {
-  "name": "zapateria",
+  "name": "tesisfront",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -16,10 +16,15 @@
   "dependencies": {
     "@emotion/react": "^11.4.0",
     "@emotion/styled": "^10.0.27",
+    "@types/axios": "^0.14.0",
+    "axios": "^0.21.1",
     "cross-fetch": "^3.1.4",
+    "formik": "^2.2.9",
     "next": "^10.2.0",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "rumble-charts": "^3.1.2",
+    "xlsx": "^0.17.0"
   },
   "devDependencies": {
     "@babel/core": "^7.14.0",
