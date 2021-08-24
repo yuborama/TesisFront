@@ -4,10 +4,10 @@ import { Chart, Ticks, Layer, Bars, Transform } from "rumble-charts";
 import LegendComponent from "../legend";
 
 type GraficProps = {
-  series: {
-    subcodigo: string;
-    data: number[];
-  }[];
+  // series: {
+  //   subcodigo: string;
+  //   data: number[];
+  // }[];
 };
 
 const series = [

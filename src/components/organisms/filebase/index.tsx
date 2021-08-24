@@ -7,20 +7,17 @@ import React, { FC, useState, useEffect } from "react";
 import XLSX from "xlsx";
 interface FileBaseProps {}
 
+
 const series = [
-  {
-    name: "John",
-    data: [1, 1, 1, 1],
-  },
-  {
-    name: "Jane",
-    data: [5],
-  },
-  {
-    name: "James",
-    data: [1],
-  },
-  { name: "James", data: [1] },
+  { subcodigo: '1', data: [ 23, 31, 31 ]},
+  { subcodigo: '2', data: [ 65, 5, 3 ]},
+  { subcodigo: '3', data: [ 18, 6, 78 ]},
+  { subcodigo: '4', data: [ 35, 78, 3 ]},
+  { subcodigo: '5', data: [ 97, 3, 11 ]},
+  { subcodigo: '6', data: [ 1, 11, 14 ]},
+  { subcodigo: '7', data: [ 1, 95, 13 ]},
+  { subcodigo: '9', data: [ 1, 14, 3 ]},
+  { subcodigo: '8', data: [ 1, 2, 95 ]}
 ];
 
 const printFile = (file: File, colunms: string[]) => {
@@ -159,8 +156,8 @@ const FileBaseComponent: FC<FileBaseProps> = (Props) => {
       >
         Enviar
       </button>
-      <GraficComponent series={series} />
-      <GraficComponent series={series} />
+      <GraficComponent />
+      {/* <GraficComponent series={series} /> */}
     </>
   );
 };
