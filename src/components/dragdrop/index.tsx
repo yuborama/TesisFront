@@ -1,10 +1,20 @@
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
-import React, { Dispatch, FC, FormEvent, SetStateAction, useEffect, useState } from "react";
+import React, {
+  Dispatch,
+  FC,
+  FormEvent,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import { Field, Form, Formik } from "formik";
 import { verify } from "crypto";
 import axios from "axios";
 import CardFile from "../cardfile";
+import ModalComponent from "../modal";
+import XLSX from "xlsx";
+import xlsxParser from "../../Hooks/UseFile";
 
 type DragdropProps = {
   uploadFiles: File[];
@@ -14,6 +24,43 @@ type DragdropProps = {
 interface MyFormValues {
   file: string;
 }
+
+const promisefilter = async (files: File[]) => {
+  return await Promise.all(
+    files.filter(async (x) => {
+      if (
+        await printFile(x, [
+          "Desde*",
+          "Hasta*",
+          "Subcódigo*",
+          "P/N*",
+          "MD from (ft)",
+          "MD to (ft)",
+        ])
+      ) { 
+        console.log("entro if promise");
+        return x;
+      }
+    })
+  );
+};
+
+const printFile = (file: File, colunms: string[]) => {
+  // let filterFile = false;
+  return new Promise((resolve, x) => {
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      const bufferArray = e.target.result;
+      const wb = XLSX.read(bufferArray, { type: "buffer" });
+      const wsname = wb.SheetNames[0];
+      const ws = wb.Sheets[wsname];
+      const data: any = XLSX.utils.sheet_to_json(ws, { header: 1 })[0];
+      const colunmsfilter = colunms.find((e) => !data.includes(e));
+      resolve(colunmsfilter ? false : true);
+    };
+    reader.readAsArrayBuffer(file);
+  });
+};
 
 const DragdropStyled = styled.label`
   border: 2px dashed #000000;
@@ -47,56 +94,126 @@ const PruebaStyled = styled.div`
 
 const DragDrogComponent: FC<DragdropProps> = (props) => {
   // const { evt } = props;
-  let filelist:any
-  const {uploadFiles, setUploadFiles} = props
+  let filelist: any;
+  const { uploadFiles, setUploadFiles } = props;
 
-  useEffect(() => {
-    const init = async () => {
-      try {
-        const response = await axios({
-          method: "GET",
-          url: "http://localhost:4000/",
-          data: "",
-          headers: { "Content-Type": "multipart/form-data" },
-        });
-        console.log(response);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    init();
-  }, []);
+  // useEffect(() => {
+  //   const init = async () => {
+  //     try {
+  //       const response = await axios({
+  //         method: "GET",
+  //         url: "http://localhost:4000/",
+  //         data: "",
+  //         headers: { "Content-Type": "multipart/form-data" },
+  //       });
+  //       console.log(response);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
+  //   init();
+  // }, []);
   console.log(uploadFiles);
+  let result: any = [];
   const [dragover, setDragover] = useState(false);
   const initialValues: MyFormValues = { file: "" };
-  console.log(dragover);
+  const [activeModal, setActiveModal] = useState(false);
+  const [uplaod, setUpload] = useState<any>();
   const fileverify = (e: any, drop: boolean) => {
-  let files: FileList;
-    // console.log("current", e.currentTarget);
+    console.log(e);
+    let files: FileList;
     drop ? ({ files } = e.dataTransfer) : ({ files } = e.currentTarget);
-    // console.log(files);
     if (files) {
-      // console.log("", Object.values(files));
-      // console.log(
-      //   "evaluacion",
-      //   Object.values(files).some((e) =>
-      //     [
-      //       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      //       "application/vnd.ms-excel",
-      //     ].includes(e.type)
-      //   )
-      // );
-      // console.log("values", Object.values(files));
-      // Object.entries(files).map(File=>setUploadFiles([...uploadFiles, File[1]]))
-      
-      filelist = files
-      console.log();
-      setUploadFiles(uploadFiles.concat(Object.values(files)));
-      // setUploadFiles([...uploadFiles, Object.values(files)]);
-      // console.log([...uploadFiles, files]);
-      
+      if (
+        Object.values(files).some((x) => /.(xlsx|xls)\b/.test(x.name) === false)
+      ) {
+        setActiveModal(!activeModal);
+      } else {
+        const values = Object.values(files).map((x) =>
+          xlsxParser.onFileHeader(x).then((data) => {
+            const colunms = [
+              "Desde*",
+              "Hasta*",
+              "Subcódigo*",
+              "P/N*",
+              "MD from (ft)",
+              "MD to (ft)",
+            ];
+            const colunmsfilter = colunms.find((e) => !data.includes(e));
+            result.push(colunmsfilter ? false : true);
+          })
+        );
+        console.log("miradme3", result);
+        const filter = async () => {
+          const colunms = [
+            "Desde*",
+            "Hasta*",
+            "Subcódigo*",
+            "P/N*",
+            "MD from (ft)",
+            "MD to (ft)",
+          ];
+          return Promise.all(
+            Object.values(files).map((file) =>
+              xlsxParser.onFileHeader(file).then((data) => {
+                const colunmsfilter = colunms.find((e) => !data.includes(e));
+                return colunmsfilter ? false : true;
+              })
+            )
+          )
+          // .then(
+          //   (data) => {console.log('mi data', data);
+          //     return data
+          //   }
+          // )
+        };
+        filter().then(data=> {
+          console.log("ultimo intento de fltro", data);
+        });
+        // const list = promisefilter(Object.values(files));
+        // const promiseresolve = async () => {
+        //   setUpload(
+        //     await Promise.all(
+        //       uploadFiles.map((x) =>
+        //         printFile(x, [
+        //           "Desde*",
+        //           "Hasta*",
+        //           "Subcódigo*",
+        //           "P/N*",
+        //           "MD from (ft)",
+        //           "MD to (ft)",
+        //         ])
+        //       )
+        //     )
+        //   );
+        // };
+        // promiseresolve()
+        // console.log("upload", uplaod)
+        // Object.values(files).filter(async (x) => {
+        //   await printFile(x, [
+        //     "Desde*",
+        //     "Hasta*",
+        //     "Subcódigo*",
+        //     "P/N*",
+        //     "MD from (ft)",
+        //     "MD to (ft)",
+        //   ]).then((resolve) => {
+        //     console.log('resolve',resolve);
+        //     if (resolve==true) {
+        //       console.log('ahi', resolve)
+        //       return x;
+        //     }
+        //   }).then(resolve =>{
+        //     filesls.push(resolve);
+        //     console.log('resolve promise all',resolve)
+        //   }
+        //   );
+        // });
+        setUploadFiles(uploadFiles.concat(Object.values(files)));
+        // console.log("revision", filelist);
+        // console.log("list", list);
+      }
     } else {
-      console.log("vacio");
     }
   };
   // console.log("entries",uploadFiles);
@@ -117,13 +234,11 @@ const DragDrogComponent: FC<DragdropProps> = (props) => {
               e.preventDefault();
               e.stopPropagation();
               setDragover(!dragover);
-              console.log("drag enter");
             }}
             onDragLeave={(e) => {
               e.preventDefault();
               e.stopPropagation();
               setDragover(!dragover);
-              console.log("drag leave");
             }}
             onDragOver={(e) => {
               e.preventDefault();
@@ -134,7 +249,6 @@ const DragDrogComponent: FC<DragdropProps> = (props) => {
               e.stopPropagation();
               fileverify(e, true);
               setDragover(!dragover);
-              // const url = URL.createObjectURL(files);
             }}
           >
             <span>
@@ -163,10 +277,6 @@ const DragDrogComponent: FC<DragdropProps> = (props) => {
               onChange={(e: FormEvent<HTMLInputElement>) => {
                 console.log(e);
                 fileverify(e, false);
-                // console.log(event.currentTarget.files);
-                // const files = event.currentTarget
-                // console.log(URL.createObjectURL(files[0]));
-                //  setFieldValue("file", event.currentTarget.files[0]);
               }}
             ></input>
           </DragdropStyled>
@@ -194,6 +304,15 @@ const DragDrogComponent: FC<DragdropProps> = (props) => {
           </button> */}
         </Form>
       </Formik>
+      <button onClick={() => setActiveModal(!activeModal)}> modal</button>
+      {activeModal && (
+        <ModalComponent
+          acepted={() => {
+            console.log("hola");
+          }}
+          close={() => setActiveModal(!activeModal)}
+        />
+      )}
     </WrapperStyled>
   );
 };
