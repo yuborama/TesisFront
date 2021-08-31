@@ -2,32 +2,22 @@ import React, { Dispatch, FC, SetStateAction, useState } from "react";
 //@ts-ignore
 import { Chart, Ticks, Layer, Bars, Transform } from "rumble-charts";
 import LegendComponent from "../legend";
+import { color } from '../../Hooks/Chooks'
 
 type GraficProps = {
-  // series: {
-  //   subcodigo: string;
-  //   data: number[];
-  // }[];
+  series: {
+    subcodigo: string;
+    data: number[];
+  }[];
+  name: string[]
 };
 
-const series = [
-  { subcodigo: "123", data: [1, 2, 3] },
-  { subcodigo: "234", data: [1, 2, 3] },
-  { subcodigo: "345", data: [1, 2, 3] },
-  { subcodigo: "456", data: [1, 2, 3] },
-  { subcodigo: "567", data: [1, 2, 3] },
-  { subcodigo: "678", data: [1, 2, 3] },
-  { subcodigo: "789", data: [1, 2, 3] },
-  { subcodigo: "890", data: [1, 2, 3] },
-  { subcodigo: "901", data: [1, 2, 3] },
-  { subcodigo: "1012", data: [1, 2, 3] },
-  { subcodigo: "1113", data: [1, 2, 3] },
-];
 
-const name = ["base", "pozo adasdasdadasdasdasd", "your news"];
-const color = ["red", "blue", "yellow"];
+// const color = ["red", "blue", "yellow"];
 
-const GraficComponent: FC<GraficProps> = (props) => {
+const GraficComponent: FC<GraficProps> = (Props) => {
+  const{series,name }=Props
+  color.length = name.length
   const [title, setTitle] = useState("");
   const [active, setActive] = useState<number[]>([]);
   return (

@@ -1,5 +1,6 @@
 
 import FileBaseComponent from "@Src/components/organisms/filebase";
+import SeriesComponent from "@Src/components/organisms/series";
 import { FC } from "react";
 
 interface Props {}
@@ -8,12 +9,8 @@ interface Props {}
 const index: FC<Props> = () => {
   return (
     <>
-    <FileBaseComponent/>
-      {/* <DragDrogComponent />
-      <CardFile text="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"/>
-      <CardFile text="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"/> */}
-      {/* <AtomInput/>
-      <GraficComponent /> */}
+    <SeriesComponent />
+     <FileBaseComponent /> 
     </>
   );
 };

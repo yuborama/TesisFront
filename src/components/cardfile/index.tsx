@@ -3,6 +3,7 @@ import { DragEventHandler, FC, FormEvent, useState } from "react";
 
 type CardProps = {
   text: string;
+  close: ()=>void;
 };
 
 const CardStyled = styled.div`
@@ -47,11 +48,11 @@ const ContainercloseStyled = styled.div`
 `;
 
 const CardFile: FC<CardProps> = (props) => {
-  const { text } = props;
+  const { text,close } = props;
   return (
     <CardStyled>
       <ContainercloseStyled onClick={() => {}}>
-        <span>x</span>
+        <span onClick={close} >x</span>
       </ContainercloseStyled>
       <img
         src="/image2vector.svg"
