@@ -90,7 +90,7 @@ const SendFilesComponent: FC<SendFilesProps> = (Props) => {
                       name="sendfile"
                       value=""
                     />
-                    <label for="sendfile1">Descargar</label>
+                    <label htmlFor="sendfile1">Descargar</label>
                   </div>
                   <div>
                     <input
@@ -99,7 +99,7 @@ const SendFilesComponent: FC<SendFilesProps> = (Props) => {
                       name="sendfile"
                       value="phone"
                     />
-                    <label for="sendfile2">Ver Grafica</label>
+                    <label htmlFor="sendfile2">Ver Grafica</label>
                   </div>
                 </div>
                 <button type="submit">Enviar</button>
