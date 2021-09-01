@@ -55,8 +55,8 @@ const CardFile: FC<CardProps> = (props) => {
   const { text,close } = props;
   return (
     <CardStyled title={text}>
-      <ContainercloseStyled onClick={() => {}}>
-        <span onClick={close} >x</span>
+      <ContainercloseStyled onClick={close}>
+        <span>x</span>
       </ContainercloseStyled>
       <img
         src="/image2vector.svg"

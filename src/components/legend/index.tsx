@@ -3,9 +3,9 @@ import { WrapperStyled, PointStyled, ContainerStyled } from "./style";
 
 export interface LegendProps {
   color: string[];
-  name: string[];
-  active: number[];
-  setActive: Dispatch<SetStateAction<number[]>>;
+  name: String[];
+  active: Number[];
+  setActive: Dispatch<SetStateAction<Number[]>>;
 }
 
 const LegendComponent: FC<LegendProps> = (Props) => {

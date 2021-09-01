@@ -8,10 +8,10 @@ import { TextStyled } from "../organisms/sendfiles/styled";
 
 type GraficProps = {
   series: {
-    subcodigo: string;
-    data: number[];
+    subcodigo: String;
+    data: Number[];
   }[];
-  name: string[];
+  name: String[];
 };
 
 // const color = ["red", "blue", "yellow"];
@@ -20,7 +20,7 @@ const GraficComponent: FC<GraficProps> = (Props) => {
   const { series, name } = Props;
   color.length = name.length;
   const [title, setTitle] = useState("");
-  const [active, setActive] = useState<number[]>([]);
+  const [active, setActive] = useState<Number[]>([]);
   return (
     <Container>
       <GraficStyled>
@@ -45,9 +45,9 @@ const GraficComponent: FC<GraficProps> = (Props) => {
 
           <SeriesStyled>
             <div title={title}>
-              <div style={{ fontFamily: "sans-serif", fontSize: "0.8em" }}>
+              <div style={{ fontFamily: "sans-serif", fontSize: "0.2em" }}>
                 <Chart
-                  width={600}
+                  width={1050}
                   height={400}
                   series={series.map((e) => ({
                     ...e,
