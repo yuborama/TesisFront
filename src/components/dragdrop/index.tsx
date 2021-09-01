@@ -21,10 +21,11 @@ interface MyFormValues {
 }
 
 const DragdropStyled = styled.label`
-  border: 2px dashed #000000;
-  height: 40vh;
-  width: 50vw;
+  border: 5px dashed #BCBEC9;
+  height: 18.75rem;
+  width: 100%;
   border-radius: 5px;
+  color: #777777;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -32,10 +33,15 @@ const DragdropStyled = styled.label`
   p {
     font-size: 2rem;
   }
+  .dropzone-text{
+    display: flex;
+    align-items: center;
+    column-gap: 0.5rem;
+  }
 `;
 
 const WrapperStyled = styled.div`
-  height: 90vh;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -62,6 +68,7 @@ const DragDrogComponent: FC<DragdropProps> = (props) => {
       if (
         Object.values(files).some((x) => /.(xlsx|xls)\b/.test(x.name) === false)
       ) {
+        setActiveModal(!activeModal)
       } else {
         const colums = [
           "Desde*",
@@ -89,74 +96,69 @@ const DragDrogComponent: FC<DragdropProps> = (props) => {
 
   return (
     <WrapperStyled>
-      <Formik
-        initialValues={initialValues}
-        onSubmit={(values, actions) => {
-          console.log({ values, actions });
-          actions.setSubmitting(false);
+      <DragdropStyled
+        onDragEnter={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setDragover(!dragover);
+        }}
+        onDragLeave={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setDragover(!dragover);
+        }}
+        onDragOver={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+        onDrop={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          fileverify(e, true);
+          setDragover(!dragover);
         }}
       >
-          <DragdropStyled
-            onDragEnter={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setDragover(!dragover);
-            }}
-            onDragLeave={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setDragover(!dragover);
-            }}
-            onDragOver={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-            }}
-            onDrop={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              fileverify(e, true);
-              setDragover(!dragover);
-            }}
-          >
-            <span>
-              {!dragover ? (
-                <>
-                  <img
-                    alt=""
-                    src="https://image.flaticon.com/icons/svg/136/136549.svg"
-                    style={{ width: "30px" }}
-                  />
-                  ARRASTRA Y SUELTA
-                </>
-              ) : (
-                <>SUELTA</>
-              )}
-            </span>
+        <span className="dropzone-text">
+          {!dragover ? (
+            <>
+              <img
+                alt=""
+                src="https://image.flaticon.com/icons/svg/136/136549.svg"
+                style={{ width: "30px" }}
+              />
+              Arrastra y suelta el archivo aquí
+            </>
+          ) : (
+            <>SUELTA</>
+          )}
+        </span>
 
-            <input
-              type="file"
-              name="file"
-              id="file"
-              hidden
-              multiple
-              accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-              onChange={(e: FormEvent<HTMLInputElement>) => {
-                console.log(e);
-                fileverify(e, false);
-              }}
-            ></input>
-          </DragdropStyled>
-      </Formik>
+        <input
+          type="file"
+          name="file"
+          id="file"
+          hidden
+          multiple
+          accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+          onChange={(e: FormEvent<HTMLInputElement>) => {
+            console.log(e);
+            fileverify(e, false);
+          }}
+        ></input>
+      </DragdropStyled>
       {activeModal && (
         <ModalComponent
-        active={activeModal}
+          active={activeModal}
           acepted={() => {
-            setUploadFiles([...uploadFiles,...valuesFilter.values.filter((e:File,i:number)=>{
-              if(valuesFilter.booleans[i]===true){
-                return e
-              }
-            })]);
-            setActiveModal(!activeModal)
+            setUploadFiles([
+              ...uploadFiles,
+              ...valuesFilter.values.filter((e: File, i: number) => {
+                if (valuesFilter.booleans[i] === true) {
+                  return e;
+                }
+              }),
+            ]);
+            setActiveModal(!activeModal);
           }}
           close={() => setActiveModal(!activeModal)}
         />

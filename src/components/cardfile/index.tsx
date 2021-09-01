@@ -14,7 +14,8 @@ const CardStyled = styled.div`
   align-items: center;
   flex-direction: column;
   position: relative;
-  border: 1px solid red;
+  margin-bottom: 1rem;
+  transition: transform .3s ease-in-out;
   p {
     width: 100%;
     padding: 0 0.4rem;
@@ -25,6 +26,8 @@ const CardStyled = styled.div`
   &:hover {
     box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.4);
     transform: translateY(-3%);
+    border-radius: .5rem;
+    padding: .3rem;
   }
 `;
 
@@ -33,7 +36,8 @@ const ContainercloseStyled = styled.div`
   right: 10%;
   top: 0;
   border-radius: 50%;
-  /* border: 0.2rem solid #000000; */
+  background-color: lightblue;
+  padding: 0.2rem 0.5rem;  
   display: flex;
   justify-content: center;
   align-items: center;
@@ -50,7 +54,7 @@ const ContainercloseStyled = styled.div`
 const CardFile: FC<CardProps> = (props) => {
   const { text,close } = props;
   return (
-    <CardStyled>
+    <CardStyled title={text}>
       <ContainercloseStyled onClick={() => {}}>
         <span onClick={close} >x</span>
       </ContainercloseStyled>
