@@ -15,10 +15,9 @@ type GraficProps = {
 };
 
 // const color = ["red", "blue", "yellow"];
-
 const GraficComponent: FC<GraficProps> = (Props) => {
   const { series, name } = Props;
-  color.length = name.length;
+  color.slice(0, name.length)
   const [title, setTitle] = useState("");
   const [active, setActive] = useState<Number[]>([]);
   return (
@@ -106,7 +105,7 @@ const GraficComponent: FC<GraficProps> = (Props) => {
                                     .classList[1]
                                 )![0]
                               );
-                              return series[subcodigo].data[data];
+                              return `subcodigo: ${series[subcodigo].subcodigo} \n${series[subcodigo].data[data]}`
                             };
                             const over = series.map((e) => ({
                               ...e,
