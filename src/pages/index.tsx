@@ -11,7 +11,9 @@ const index: FC<Props> = () => {
   return (
     <>
       <GlobalStyles />
-      <SendFilesComponent />
+      {/* <SendFilesComponent /> */}
+      <FileBaseComponent/>
+      <SeriesComponent/>
     </>
   );
 };

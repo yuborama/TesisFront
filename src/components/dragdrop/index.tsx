@@ -14,15 +14,17 @@ import { verifiFile } from "@Src/Hooks/Chooks";
 type DragdropProps = {
   uploadFiles: File[];
   setUploadFiles: Dispatch<SetStateAction<File[]>>;
+  height?: String;
+  single?: Boolean;
 };
 
 interface MyFormValues {
   file: string;
 }
 
-const DragdropStyled = styled.label`
-  border: 5px dashed #BCBEC9;
-  height: 18.75rem;
+const DragdropStyled = styled.label<any>`
+  border: 5px dashed #bcbec9;
+  height: ${({ height }) => height || "18.75rem"};
   width: 100%;
   border-radius: 5px;
   color: #777777;
@@ -33,15 +35,16 @@ const DragdropStyled = styled.label`
   p {
     font-size: 2rem;
   }
-  .dropzone-text{
+  .dropzone-text {
     display: flex;
     align-items: center;
     column-gap: 0.5rem;
   }
 `;
 
-const WrapperStyled = styled.div`
+const WrapperStyled = styled.div<any>`
   width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -57,7 +60,7 @@ const PruebaStyled = styled.div`
 `;
 
 const DragDrogComponent: FC<DragdropProps> = (props) => {
-  const { uploadFiles, setUploadFiles } = props;
+  const { uploadFiles, setUploadFiles, height,single } = props;
   const [valuesFilter, setValuesFilter] = useState<any>({});
   const fileverify = async (e: any, drop: boolean) => {
     console.log(e);
@@ -68,7 +71,7 @@ const DragDrogComponent: FC<DragdropProps> = (props) => {
       if (
         Object.values(files).some((x) => /.(xlsx|xls)\b/.test(x.name) === false)
       ) {
-        setActiveModal(!activeModal)
+        setActiveModal(!activeModal);
       } else {
         const colums = [
           "Desde*",
@@ -97,6 +100,7 @@ const DragDrogComponent: FC<DragdropProps> = (props) => {
   return (
     <WrapperStyled>
       <DragdropStyled
+        height={height}
         onDragEnter={(e) => {
           e.preventDefault();
           e.stopPropagation();
@@ -138,7 +142,7 @@ const DragDrogComponent: FC<DragdropProps> = (props) => {
           name="file"
           id="file"
           hidden
-          multiple
+          multiple={single?false:true}
           accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
           onChange={(e: FormEvent<HTMLInputElement>) => {
             console.log(e);
