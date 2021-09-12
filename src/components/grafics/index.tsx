@@ -14,6 +14,7 @@ type GraficProps = {
   name: String[];
 };
 
+
 // const color = ["red", "blue", "yellow"];
 const GraficComponent: FC<GraficProps> = (Props) => {
   const { series, name } = Props;
@@ -125,15 +126,15 @@ const GraficComponent: FC<GraficProps> = (Props) => {
                           },
                         }}
                         className={"bar"}
-                        barStyle={({ seriesIndex, props }: any) => {
-                          const len = props.series.length;
-                          const offset = -((1 - len) / 2 + seriesIndex) * 25;
-                          // console.log('seriesIndex props', {series:seriesIndex, props:props,offset:offset,len:len});
-                          return {
-                            transform: `translateX(${offset}px)`,
-                            // zIndex:  `${(0-seriesIndex)}`,
-                          };
-                        }}
+                        // barStyle={({ seriesIndex, props }: any) => {
+                        //   const len = props.series.length;
+                        //   const offset = -((1 - len) / 2 + seriesIndex) * 25;
+                        //   console.log('seriesIndex props', {series:seriesIndex, props:props,offset:offset,len:len});
+                        //   // return {
+                        //   //   transform: `translateX(${offset}px)`,
+                        //   //   // zIndex:  `${(0-seriesIndex)}`,
+                        //   // };
+                        // }}
                       />
                     </Transform>
                   </Layer>
