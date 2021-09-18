@@ -232,7 +232,7 @@ const SeriesComponent: FC<SeriesProps> = (Props) => {
                 subcodigo: subcodigo,
                 data: data
                   .filter((_, i) => i !== 0)
-                  .map((e: number) => filebase - e),
+                  .map((e: number) => e-filebase),
               };
             })}
             name={name.slice(1)}
