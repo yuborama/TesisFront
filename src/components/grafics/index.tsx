@@ -2,7 +2,7 @@ import React, { Dispatch, FC, SetStateAction, useState } from "react";
 //@ts-ignore
 import { Chart, Ticks, Layer, Bars, Transform } from "rumble-charts";
 import LegendComponent from "../legend";
-import { color } from "../../Hooks/Chooks";
+import { color,descSubcodigos } from "../../Hooks/Chooks";
 import { Container, GraficStyled, LegendStyled, SeriesStyled } from "./styled";
 import { TextStyled } from "../organisms/sendfiles/styled";
 
@@ -12,12 +12,13 @@ type GraficProps = {
     data: Number[];
   }[];
   name: String[];
+  namegraphip?: String;
 };
 
 
 // const color = ["red", "blue", "yellow"];
 const GraficComponent: FC<GraficProps> = (Props) => {
-  const { series, name } = Props;
+  const { series, name, namegraphip } = Props;
   color.slice(0, name.length)
   const [title, setTitle] = useState("");
   const [active, setActive] = useState<Number[]>([]);
@@ -31,7 +32,7 @@ const GraficComponent: FC<GraficProps> = (Props) => {
               fontweight={700}
               marginbottom={"1rem"}
             >
-              Grafica
+              {namegraphip || "Grafica"}
             </TextStyled>
         <div className="GraficContent">
           <LegendStyled>
@@ -106,7 +107,8 @@ const GraficComponent: FC<GraficProps> = (Props) => {
                                     .classList[1]
                                 )![0]
                               );
-                              return `subcodigo: ${series[subcodigo].subcodigo} \n${series[subcodigo].data[data]}`
+                              const descSubcodigo = descSubcodigos.find(elemt =>elemt.subcodigo == series[subcodigo].subcodigo)
+                              return `subcodigo: ${descSubcodigo?.subcodigo || 'no definido'}\nDescripcion: ${descSubcodigo?.descripcion || 'no definido'}\n${series[subcodigo].data[data]}`
                             };
                             const over = series.map((e) => ({
                               ...e,

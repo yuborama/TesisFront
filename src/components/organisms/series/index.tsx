@@ -223,7 +223,7 @@ const SeriesComponent: FC<SeriesProps> = (Props) => {
       </Container>
       {series.length !== 0 && (
         <div>
-          <GraficComponent series={series} name={name} />
+          <GraficComponent series={series} name={name}  namegraphip="Grafica de desempeño de pozos"/>
           <GraficComponent
             series={series.map((elemarray) => {
               const { subcodigo, data } = elemarray;
@@ -243,7 +243,8 @@ const SeriesComponent: FC<SeriesProps> = (Props) => {
               };
             })}
             name={name.slice(1)}
-          />
+            namegraphip="Grafica de tiempos invisibles"
+      />
         </div>
       )}
     </>
