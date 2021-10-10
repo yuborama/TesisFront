@@ -13,6 +13,15 @@ import { API_URL } from "@Src/config";
 import axios, { AxiosResponse } from "axios";
 import LoadingComponent from "@Src/components/loading";
 import GraficComponent from "@Src/components/grafics";
+import TableComponent from "@Src/components/table";
+
+type tableValues = {
+  file: string;
+  datos: {
+    "Subcódigo*": string;
+    hours: number;
+  }[];
+};
 
 interface SeriesProps {}
 
@@ -26,6 +35,7 @@ const SeriesComponent: FC<SeriesProps> = (Props) => {
     []
   );
   const [name, setName] = useState<String[]>([]);
+  const [tableValues, setTableValues] = useState<tableValues[]>([]);
 
   useEffect(() => {
     setFileBase(uploadFileBase[0]);
@@ -49,13 +59,36 @@ const SeriesComponent: FC<SeriesProps> = (Props) => {
             (
               response: AxiosResponse<{
                 data: {
-                  File: String;
+                  File: string;
                   datos: { "Subcódigo*": string; hours: number }[];
                 }[];
               }>
             ) => {
               setLoading(false);
               console.log(response.data);
+
+              const filebase = response.data.data[0];
+              const result = response.data.data
+                .filter((_, i) => i !== 0)
+                .map((em) => {
+                  return {
+                    file: em.File,
+                    datos: em.datos.map((edm) => {
+                      const filebasefind = filebase.datos.find(
+                        (ef) => ef["Subcódigo*"] == edm["Subcódigo*"]
+                      );
+                      if (filebasefind) {
+                        return {
+                          "Subcódigo*": edm["Subcódigo*"],
+                          hours: edm.hours - filebasefind.hours,
+                        };
+                      }
+                      return edm;
+                    }),
+                  };
+                });
+              setTableValues(result);
+
               let responseSeries: {
                 subcodigo: string;
                 data: { index: number; value: number }[];
@@ -223,7 +256,11 @@ const SeriesComponent: FC<SeriesProps> = (Props) => {
       </Container>
       {series.length !== 0 && (
         <div>
-          <GraficComponent series={series} name={name}  namegraphip="Grafica de desempeño de pozos"/>
+          <GraficComponent
+            series={series}
+            name={name}
+            namegraphip="Grafica de desempeño de pozos"
+          />
           <GraficComponent
             series={series.map((elemarray) => {
               const { subcodigo, data } = elemarray;
@@ -234,17 +271,18 @@ const SeriesComponent: FC<SeriesProps> = (Props) => {
                   .filter((_, i) => i !== 0)
                   .map((e: number) => {
                     let number;
-                    number = e-filebase
-                    if (number<0) {
-                      return 0
+                    number = e - filebase;
+                    if (number < 0) {
+                      return 0;
                     }
-                    return number
+                    return number;
                   }),
               };
             })}
             name={name.slice(1)}
             namegraphip="Grafica de tiempos invisibles"
-      />
+          />
+          <TableComponent results={tableValues} />
         </div>
       )}
     </>
