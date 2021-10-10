@@ -28,6 +28,10 @@ export const TableStyled = styled.table`
     }
     thead{
         tr{
+            th{
+                padding: 0.5rem 0.5rem;
+                font-weight: 700;
+            }
             border: 1px solid black;  
         }
     }

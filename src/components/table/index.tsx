@@ -32,13 +32,13 @@ const TableComponent: FC<TableProps> = (props) => {
               </TextStyled>
             </tr>
             <tr>
-              <TextStyled fontzise={"1.5rem"} fontweight={400} as="th">
+              <TextStyled fontzise={"1.0rem"} fontweight={700} as="th">
                 Subcodigo
               </TextStyled>
-              <TextStyled fontzise={"1.5rem"} fontweight={400} as="th">
+              <TextStyled fontzise={"1.0rem"} fontweight={700} as="th">
                 Tiempo (H)
               </TextStyled>
-              <TextStyled fontzise={"1.5rem"} fontweight={400} as="th">
+              <TextStyled fontzise={"1.0rem"} fontweight={700} as="th">
                 Descripcion
               </TextStyled>
             </tr>
